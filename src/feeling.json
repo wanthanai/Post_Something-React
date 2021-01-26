@@ -1,0 +1,77 @@
+{
+    "feelings": [
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187134.png",
+            "feeling_name": "Happy"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187133.png",
+            "feeling_name": "Blessed"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187154.png",
+            "feeling_name": "Be loved"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187150.png",
+            "feeling_name": "Sad"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187160.png",
+            "feeling_name": "Cheerful"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187142.png",
+            "feeling_name": "Thank"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187162.png",
+            "feeling_name": "Excited"
+        },
+        { 
+            "icon": "https://image.flaticon.com/icons/png/128/187/187155.png",
+            "feeling_name": "in love"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187164.png",
+            "feeling_name": "Crazy"
+        }, 
+        { 
+            "icon": "https://image.flaticon.com/icons/png/128/187/187158.png",
+            "feeling_name": "Grateful"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187159.png",
+            "feeling_name": "Delighted"
+        }, 
+        { 
+            "icon": "https://image.flaticon.com/icons/png/128/187/187159.png",
+            "feeling_name": "Great"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187160.png",
+            "feeling_name": "Ridiculous"
+        }, 
+        { 
+            "icon": "https://image.flaticon.com/icons/png/128/187/187139.png",
+            "feeling_name": "Cool"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187156.png",
+            "feeling_name": "WoW"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187145.png",
+            "feeling_name": "Hungry"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187146.png",
+            "feeling_name": "Angry"
+        },
+        {
+            "icon": "https://image.flaticon.com/icons/png/128/187/187139.png",
+            "feeling_name": "Smart"
+        }
+
+    ]
+}

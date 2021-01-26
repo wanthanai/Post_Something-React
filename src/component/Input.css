@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto Slab', serif;
+}
+
+/*! container */
+.container 
+{
+    border: 1px solid transparent;
+
+    position: relative;
+    max-width: 100vw;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+
+    background-color: #282729;
+}
+/* header image */
+.header_img 
+{
+    /* border: 1px solid blue; */
+
+    max-width: 687px;
+    width: 100%;
+    height: 250px;
+    margin: 4.5rem auto 1em auto;
+
+    background: url(./draw-react.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.5;
+}
+
+/*! input main wrapper */
+.input_main_wrapper 
+{
+    /* border: 1px solid green; */
+    position: relative;
+    max-width: 687px;
+    width: 100%;
+    height: 127px;
+
+    padding: 12px;
+    margin: 0 auto;
+    box-shadow: 3px 3px 10px rgb(0, 0, 0, 0.3);    
+    background: #413f42;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+/* main top */
+.main_top 
+{
+    /* border: 1px solid yellow; */
+    /* background: #413f42; */
+    /* border-radius: 10px; */
+    border-bottom: 1px solid rgb(83, 83, 83);
+
+    width: 100%;
+    height: 100%;
+    padding-bottom: .7em;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* top profile */
+.top_profile_wrapper 
+{
+    position: relative;
+    width: 7%;
+    margin-right: 5px;
+}
+.main_top .top_profile 
+{
+    position: relative;
+    width: 40px;
+    height: 38px;
+
+    border-radius: 50%;
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0px 0px 3px rgb(0, 0, 0, .3);
+} 
+.main_top .top_profile::after
+{
+    position: absolute;
+    content: '';
+
+    width: 100%;
+    height: 100%;
+    background: rgb(0, 0, 0, .2);
+    border-radius: 50%;
+    
+    top: 0;
+    left: 0;
+
+    transition: .1s ease;
+}
+.main_top .top_profile:hover::after
+{
+    background: rgb(255, 255, 255, 0.13);
+}
+
+.main_top .top_input
+{
+    position: relative;
+
+    width: 100%;
+    height: 40px;
+    padding: 10px 15px 10px 15px;
+    line-height: 20px;
+    letter-spacing: 0.8px;
+    
+    border-radius: 20px;
+    border:none;
+    outline: none;
+    
+    background: #282729;
+    color: rgb(190, 190, 190);
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0px 0px 3px rgb(0, 0, 0, .3);
+}
+.main_top .top_input::after 
+{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background: #49484866;
+
+    left: 0;
+    top: 0;
+    transition: .1s;
+}
+.main_top .top_input::selection
+{
+    pointer-events: none;
+}
+.main_top .top_input:hover::after 
+{
+    opacity: 0;
+}
+/* Ellipsis */
+.LinesEllipsis 
+{
+    color: #fff !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px 50% 10px 15px !important;
+    width: 96% !important;
+}
+/* main bottom */
+.input_main_wrapper .main_bottom 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    padding-top: 12px;
+}
+/* bottom image */
+.main_bottom .bottom_image 
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 2em;
+
+    color: #e0e0e0;
+    font-size: 15px;
+    padding: 8px;
+
+    transition: .1s;
+    border-radius: 10px;
+    cursor: pointer;
+}
+/* bottom feeling */
+.main_bottom .bottom_feeling 
+{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #e0e0e0;
+    font-size: 15px;
+    padding: 8px;
+
+    transition: .1s;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.main_bottom .bottom_image:hover,
+.main_bottom .bottom_feeling:hover 
+{
+    background: #6e6d6d66;
+}
+.main_bottom .bottom_image::selection,
+.main_bottom .bottom_feeling::selection
+{
+    pointer-events: none;
+} 
