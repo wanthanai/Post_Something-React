@@ -18,7 +18,8 @@
     height: 100%;
     margin: 0 auto;
 
-    background-color: #282729;
+    /* background-color: #282729; */
+    background-color: #b1b1b1;
 }
 /* header image */
 .header_img 
