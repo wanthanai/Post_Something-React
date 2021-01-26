@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Post_Something-React/static/css/main.8472c0c6.chunk.css",
+    "main.js": "/Post_Something-React/static/js/main.5c5e65a6.chunk.js",
+    "main.js.map": "/Post_Something-React/static/js/main.5c5e65a6.chunk.js.map",
+    "runtime-main.js": "/Post_Something-React/static/js/runtime-main.b41a2a1e.js",
+    "runtime-main.js.map": "/Post_Something-React/static/js/runtime-main.b41a2a1e.js.map",
+    "static/css/2.44e6b886.chunk.css": "/Post_Something-React/static/css/2.44e6b886.chunk.css",
+    "static/js/2.3aafc2af.chunk.js": "/Post_Something-React/static/js/2.3aafc2af.chunk.js",
+    "static/js/2.3aafc2af.chunk.js.map": "/Post_Something-React/static/js/2.3aafc2af.chunk.js.map",
+    "index.html": "/Post_Something-React/index.html",
+    "static/css/2.44e6b886.chunk.css.map": "/Post_Something-React/static/css/2.44e6b886.chunk.css.map",
+    "static/css/main.8472c0c6.chunk.css.map": "/Post_Something-React/static/css/main.8472c0c6.chunk.css.map",
+    "static/js/2.3aafc2af.chunk.js.LICENSE.txt": "/Post_Something-React/static/js/2.3aafc2af.chunk.js.LICENSE.txt",
+    "static/js/main.5c5e65a6.chunk.js.LICENSE.txt": "/Post_Something-React/static/js/main.5c5e65a6.chunk.js.LICENSE.txt",
+    "static/media/Input.css": "/Post_Something-React/static/media/draw-react.7b78f5c3.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b41a2a1e.js",
+    "static/css/2.44e6b886.chunk.css",
+    "static/js/2.3aafc2af.chunk.js",
+    "static/css/main.8472c0c6.chunk.css",
+    "static/js/main.5c5e65a6.chunk.js"
+  ]
+}
