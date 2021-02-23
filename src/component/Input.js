@@ -1,5 +1,5 @@
 //! Import
-import React, {useState} from 'react'
+import React from 'react'
 import './Input.css'
 // PropTypes
 import PropTypes from 'prop-types'
@@ -12,6 +12,7 @@ import ImageUploading from 'react-images-uploading';
 
 
 
+
 //! Variable
 // Images Uploading
 const acceptType = ['jpeg', 'jpg', 'png', 'gif', 'tiff', 'heif', 'webp', 'svg']
@@ -19,7 +20,7 @@ const maxNumber = 69;
 
 
 //! Function Component
-export default function Input({ inputProfileImg, onClickShowImage, inputProfileName, getWindowInput, textInputPost, getUploadImage, images, getStatusFeeling , statusInputMain }) {
+export default function Input({ inputProfileImg, onClickShowImage, inputProfileName, getWindowInput, textInputPost, getUploadImage, imagesPosts, getStatusFeeling , countTextInputPost }) {
     //! State
     // State Image Input Post
     
@@ -35,7 +36,7 @@ export default function Input({ inputProfileImg, onClickShowImage, inputProfileN
     //* 2.Handle Image Change
     const handleImageChange = (imageList, addUpdateIndex) => {
         // console.log(imageList, addUpdateIndex);
-        getUploadImage(imageList, true);
+        getUploadImage(imageList, addUpdateIndex, true);
     }; 
 
     //* 3.Do not open Window Input Post
@@ -68,9 +69,8 @@ export default function Input({ inputProfileImg, onClickShowImage, inputProfileN
                         </div>
                     </div>
 
-                    {/* top input */}
-                    {textInputPost !== '' 
-                        ?  <div onClick={toggleInput} className="LinesEllipsis top_input">{textInputPost.length > 40 ? `${textInputPost}...` : `${textInputPost}`}</div>   
+                    {countTextInputPost !== 0 
+                        ? <div onClick={toggleInput} className="LinesEllipsis top_input">{textInputPost.length > 40 ? `${textInputPost}...` : `${textInputPost}`}</div>   
                         : <div onClick={toggleInput} className="top_input">{inputProfileName !== '' ? `What are you thinking? ${inputProfileName}` : 'What are you thinking? ...'}</div>
                     }
                 </div>
@@ -79,7 +79,7 @@ export default function Input({ inputProfileImg, onClickShowImage, inputProfileN
                     {/* bottom image */}
                     <ImageUploading
                         multiple
-                        value={images}
+                        value={imagesPosts}
                         onChange={handleImageChange}
                         maxNumber={maxNumber}
                         dataURLKey="data_url"
@@ -138,7 +138,7 @@ Input.propTypes = {
     getWindowInput: PropTypes.func.isRequired, 
     textInputPost: PropTypes.string.isRequired, 
     getUploadImage: PropTypes.func.isRequired,
-    images: PropTypes.object.isRequired, 
+    imagesPosts: PropTypes.array.isRequired, 
     getStatusFeeling: PropTypes.func.isRequired, 
-    statusInputMain: PropTypes.bool.isRequired
+    countTextInputPost: PropTypes.number.isRequired
 }

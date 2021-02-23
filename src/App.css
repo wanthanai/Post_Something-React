@@ -12,14 +12,17 @@
 /*! App */
 .App 
 {
-    width: 100vw;
-    height: 100vh;   
-    min-height: 100%;
+    width: 100%;
+    height: 100%;   
+    min-height: 100vh;
     /* border: 1px solid red; */
 
     /* font-family: 'Fraunces', serif; */
     font-family: 'Roboto Slab', serif;
     position: relative;
+
+    overflow-x: hidden;
+    background-color: #282729;
 }
 
 /*! main show image */
@@ -44,7 +47,7 @@
 {
     /* border: 1px solid red; */
 
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100vh;
 
@@ -59,9 +62,8 @@
 /* show image */
 .main_show_image .show_image 
 {
-    width: 400px;
-    height: 400px; 
-
+    width: 500px;
+    height: 500px; 
     transition: .2s;
 }
 
@@ -73,17 +75,39 @@
 
     position: absolute;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 
     top: 0;
     left: 0;
-
-    background: rgb(0, 0, 0, 0.5);
 
     display: flex;
     justify-content: center;
     align-items: center;
     
+}
+.main_show_input.show::before
+{
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgb(0, 0, 0, 0.5);
+}
+/* main_show_input_container */
+.main_show_input_container 
+{
+    /* border: 1px solid red; */
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 /*! main show input wrapper */
 .main_show_input_wrapper 
@@ -326,6 +350,10 @@
 {
     outline: none !important;
     cursor: pointer;
+}
+.emoji-mart .emoji-mart-emoji span
+{
+    cursor: pointer !important;
 }
 .emoji-mart-skin-swatch.selected 
 {
@@ -798,7 +826,7 @@
 }
 .search_feeling::selection
 {
-    background: rgb(181, 136, 233);
+    background: #b588e9;
 }
 .search_feeling::placeholder
 {
@@ -973,4 +1001,452 @@
 .loading_feeling_wrapper
 {
     border: 1px solid red;
+}
+
+
+/*! Show List Images Post */
+/* container */
+/* close */
+.listImagesPost_container.close
+{
+ display: none;
+}
+/* show */
+.listImagesPost_container.show
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100vh;
+    background: rgb(0, 0, 0, 0.9);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
+}
+/* wrapper */
+.listImagesPost_wrapper
+{
+    /* border: 1px solid red; */
+    border-radius: 7px;
+
+    position: relative;
+    width: 1300px;
+    min-height: 80vh;
+
+    background: rgb(29, 29, 29);
+    box-shadow: 3px 3px 10px rgb(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* delete one loading */
+.listImagesPost_wrapper.loading
+{
+    /* border: 1px solid blue; */
+    position: relative;
+    transition: .2s;
+}
+.listImagesPost_wrapper.loading::after
+{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+
+    border-radius: 7px;
+    background: rgb(0, 0, 0, 0.8);
+    transition: .2s;
+}
+/* loading icon */
+.deleteOne_loading-icon
+{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: url(./loading-post.svg) no-repeat center/contain;
+    /* border: 1px solid red; */
+
+    z-index: 999;
+}
+/* delete Success */
+.deleteOne_loading-success
+{
+    /* border: 1px solid red; */
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 10px;
+    background: rgb(31, 31, 31);
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.5);
+
+    z-index: 999;
+    transition: .2s;
+    cursor: pointer;
+}
+.deleteOne_loading-success p
+{
+    color: rgb(230, 230, 230);
+    font-size: 1.5rem;
+}
+.deleteOne_loading-success p::selection
+{
+    pointer-events: none;
+}
+.deleteOne_loading_icon-success
+{
+    width: 50px;
+    height: 50px;
+    background: url(./success.svg) no-repeat center/contain;
+}
+/* img */
+.listImagesPost_img-wrapper
+{
+    /* border: 1px solid yellow; */
+    position: relative;
+    width: 100%;
+    height: 700px;
+
+    background: rgb(8, 8, 8);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.listImagesPost_img
+{
+    /* border: 1px solid pink; */
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+/* button */
+/* Prev Container */
+.listImagesPost_btn_Prev-container
+{
+    /* border: 1px solid blue; */
+    position: absolute;
+    left: 0px;
+
+    width: 70px;
+    height: 100%;
+
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0.1);
+    transition: .2s;
+}
+/* Prev Wrapper */
+.listImagesPost_btn_Prev-wrapper
+{
+    /* border: 1px solid green; */
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: rgb(51, 51, 51, 0.4);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.2);
+
+    transition: .2s;
+}
+/* Prev */
+.listImagesPost_btn-Prev
+{
+    /* border: 1px solid red; */
+
+    color: rgb(255, 255, 255, 0.4);
+    font-size: 1.6rem;
+    transition: .2s;
+}
+/* Next Container */
+.listImagesPost_btn_Next-container
+{
+    /* border: 1px solid blue; */
+    position: absolute;
+    right: 0px;
+
+    width: 70px;
+    height: 100%;
+
+    cursor: pointer;
+    background: rgb(0, 0, 0, 0.1);
+    transition: .2s;
+}
+/* Next Wrapper */
+.listImagesPost_btn_Next-wrapper
+{
+    /* border: 1px solid green; */
+
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: rgb(51, 51, 51, 0.4);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.2);
+
+    transition: .2s;
+}
+/* Next */
+.listImagesPost_btn-Next
+{
+    /* border: 1px solid red; */
+
+    color: rgb(255, 255, 255, 0.4);
+    font-size: 1.6rem;
+    transition: .2s;
+}
+/* Edit */
+.listImagesPost_btn-Edit
+{
+    position: absolute;
+}
+/* Close */
+.listImagesPost_btn-Close
+{
+    position: absolute;
+}
+/* Button Hover */
+/* Button Hover Container */
+.listImagesPost_btn_Next-container:hover
+{
+    transform: translate(3px);
+    background: rgb(0, 0, 0, 0.12);
+}
+.listImagesPost_btn_Prev-container:hover 
+{
+    transform: translate(-3px);
+    background: rgb(0, 0, 0, 0.12);
+}
+/* Button Hover Wrapper */
+.listImagesPost_btn_Next-container:hover .listImagesPost_btn_Next-wrapper,
+.listImagesPost_btn_Prev-container:hover .listImagesPost_btn_Prev-wrapper
+
+{
+    background: rgb(51, 51, 51, 0.7);
+}
+/* Button Hover Prev Next */
+.listImagesPost_btn_Prev-container:hover .listImagesPost_btn-Prev,
+.listImagesPost_btn_Next-container:hover .listImagesPost_btn-Next
+{
+    color: rgb(255, 255, 255, 0.9);
+}
+
+/* button Close */
+.listImagesPost_btn_Close-wrapper
+{
+    /* border: 1px solid red; */
+
+    position: absolute;
+    top: 30px;
+    right: 30px;
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgb(41, 41, 41, 0.6);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.4);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: .1s;
+    cursor: pointer;
+}
+.listImagesPost_btn-Close
+{
+    font-size: 1.6rem;
+    color: rgb(218, 218, 218);
+}
+.listImagesPost_btn_Close-wrapper:hover
+{
+    background: rgb(41, 41, 41, 1);
+}
+
+/* button Edit */
+.listImagesPost_btn_Edit-wrapper
+{
+    /* border: 1px solid red; */
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.4);
+
+    position: absolute;
+    top: 5px;
+    right: 10px;
+
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    transition: .1s;
+}
+.listImagesPost_btn-Edit
+{
+    font-size: 1.3rem;
+    color: rgb(194, 194, 194);
+}
+.listImagesPost_btn_Edit-wrapper:hover
+{
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* window delete */
+.listImagesPost_btn_Edit_window-delete.close
+{
+    display: none;
+}
+.listImagesPost_btn_Edit_window-delete.show
+{
+    /* border: 1px solid red; */
+
+    position: absolute;
+    top: 10px;
+    right: 70px;
+    padding: 7px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 7px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* box triangle */
+.box_window-delete
+{
+    /* border: 1px solid pink; */
+    /* width: 15px; */
+    /* height: 15px; */
+    /* background: rgba(255, 255, 255, 0.1); */
+
+    width: 0; 
+    height: 0; 
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    
+    border-left: 15px solid rgba(255, 255, 255, 0.1);
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    position: absolute;
+    top: 25%;
+    right: -15px;
+
+    transform: translateY(-50%);
+}
+/* button delete one, and All */
+.delete_one
+{
+    font-size: 15px;
+    font-weight: 700;
+    background: #895ad4;
+    color: rgb(224, 224, 224);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.4);
+
+    position: relative;
+    text-align: center;
+    width: 100%;
+    padding: 3px;
+
+    border-radius: 6px;
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+} 
+.delete_all
+{
+    font-size: 15px;
+    font-weight: 700;
+    background: #895ad4;
+    color: rgb(224, 224, 224);
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.4);
+
+    position: relative;
+    text-align: center;
+    width: 100%;
+    padding: 3px;
+    margin-top: 7px;
+
+    border-radius: 6px;
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+}
+/* after */
+.delete_one::after
+{
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+
+    transition: .1s;
+}
+.delete_all::after
+{
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+
+    transition: .1s;
+}
+/* after hover */
+.delete_all:hover::after,
+.delete_one:hover::after
+{
+    background: rgba(0, 0, 0, 0.1);
+}
+/* selection */
+.delete_one::selection,
+.delete_all::selection
+{
+    pointer-events: none;
 }

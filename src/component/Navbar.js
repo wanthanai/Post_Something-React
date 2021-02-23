@@ -53,6 +53,8 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
     //! show custom profile
     const showCustomProfile = () => {
         setWindowCustom(true); 
+        // Do not open Window Input Post
+        getStatusInputPost(false);
     }
     //! close custom profile
     const closeCustomProfile = () => {
@@ -160,7 +162,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
                 {/* //! Navbar */}
                 <header className="navbar_header">
                     {/* logo */}
-                    <a href="/">Post Somthing</a>
+                    <a href="/">Post Something</a>
 
                     {/* profile */}
                     <div onClick={showCustomProfile} className="navbar_profile_wrapper">
