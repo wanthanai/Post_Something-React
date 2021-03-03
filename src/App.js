@@ -34,7 +34,8 @@ import
 {   thunk_action_deleteOne, thunk_action_deleteLastImg, toggle_window_delete_img, increment_index_list_images, decrement_index_list_images, set_index_list_images,
     set_list_images_post, thunk_action_oneImageLeft, toggle_window_list_imagesPost, thunk_action_deleteAll, thunk_action_setPosts, set_text_input_post, set_images_posts,
     toggle_window_input_post, set_count_text_input_post, set_feeling_status, set_idPost_showing, set_feeling_icon, set_status_post_button, toggle_window_option_post,
-    toggle_window_navbar, thunk_action_deletePhoto, thunk_action_deletePost, thunk_action_editPost, toggle_window_editPost, thunk_action_save_editPost
+    toggle_window_navbar, thunk_action_deletePhoto, thunk_action_deletePost, thunk_action_editPost, toggle_window_editPost, thunk_action_save_editPost, toggle_window_removeAllimg,
+    toggle_window_emoji
 } 
 from './actions/index';
 
@@ -60,10 +61,6 @@ function App(props) {
     const [inputProfileName, setInputProfileName] = useState("");
     // State Text Input Post
     const [fontSizeInput, setFontSizeInput] = useState("big");
-    // State Emoji Toggle
-    const [windowEmoji, setWindowEmoji] = useState(false);
-    // State Window Remove All Images List
-    const [windowRemoveAllImg, setWindowRemoveAllImg] = useState(false);
     // State Slide 
     const [slideResult, setSlideResult] = useState('');
     const [slideSize, setSlideSize] = useState('');
@@ -73,8 +70,6 @@ function App(props) {
     const [feelingItems, setFeelingItems] = useState([]);
     // Search Term
     const [searchTerm, setSearchTerm] = useState('');
-    // Status Input Main
-    const [statusInputMain, setStatusInputMain] = useState(false);
 
 
     //! useAlert();
@@ -164,11 +159,7 @@ function App(props) {
   
     //* 6. Emoji Toggle
     const toggleEmoji = () => {
-      if (!windowEmoji) {
-        setWindowEmoji(true);
-      } else {
-        setWindowEmoji(false);
-      }
+        props.dispatch(toggle_window_emoji('toggle'));
     };
   
     //* 7. Get Status and Open Window Input Post
@@ -197,7 +188,7 @@ function App(props) {
     //* 8. Close Input Post
     const closeInputPost = () => {  
         props.dispatch(toggle_window_input_post(false));
-
+        props.dispatch(toggle_window_removeAllimg('close'));
     };
   
     //* 9. handle image change  
@@ -246,8 +237,6 @@ function App(props) {
                 props.dispatch(set_status_post_button(true));
             } else props.dispatch(set_status_post_button(false)); 
         } 
-        
-        
     }; 
 
 
@@ -258,7 +247,9 @@ function App(props) {
         setFeelingItems(feelingJSON.feelings);
         setSlideSize(slideItem.current.clientWidth);
         setSlideResult('right');
-        setWindowEmoji(false);
+        props.dispatch(toggle_window_emoji('close'));
+        // close window remove all img
+        props.dispatch(toggle_window_removeAllimg('close'));
     }
     //* 11.1 slide Next - ( Edit Post )
     const slideRightEditPost = async() => {
@@ -266,7 +257,7 @@ function App(props) {
         setFeelingItems(feelingJSON.feelings);
         setSlideSizeEditPost(slideItemEditPost.current.clientWidth);
         setSlideResultEditPost('right');
-        setWindowEmoji(false);
+        props.dispatch(toggle_window_emoji('close'));
     }
 
     //* 12. Slide Previous
@@ -434,6 +425,7 @@ function App(props) {
     //* 31. Close Edit Post 
     const closeEditPost = () => {
         props.dispatch(toggle_window_editPost('close'));
+        props.dispatch(toggle_window_removeAllimg('close'));
     }
 
     //* 32. Save Edit Post
@@ -478,7 +470,7 @@ function App(props) {
     const emojiPicker = (
       <span
         className={
-          !windowEmoji
+          !props.data.isWindowEmoji
             ? "emoji_picker_wrapper close"
             : "emoji_picker_wrapper show"
         }
@@ -503,7 +495,7 @@ function App(props) {
                     {/* box */}
                     <div 
                         className={
-                            !windowEmoji
+                            !props.data.isWindowEmoji
                               ? "box-emojiPicker close"
                               : "box-emojiPicker show"
                         }                          
@@ -598,7 +590,10 @@ function App(props) {
                                                     id={index} 
                                                     style={{background: `url(${image.data_url}) no-repeat center/cover`}}
                                                 >
-                                                    <IoClose onClick={() => onImageRemove(index)} className="li_image_close"/>
+                                                    <IoClose onClick={() => {
+                                                        onImageRemove(index)
+                                                        props.dispatch(toggle_window_removeAllimg('close'))
+                                                    }} className="li_image_close"/>
                                                 </li>
                                             )
                                             : 
@@ -609,10 +604,13 @@ function App(props) {
                                                     key={index} 
                                                     id={index} 
                                                     style={{background: `url(${image.data_url}) no-repeat center/cover`}}>
-                                                        <IoClose onClick={() => onImageRemove(index)} className="li_image_close"/>
+                                                        <IoClose onClick={() => {
+                                                            onImageRemove(index)
+                                                            props.dispatch(toggle_window_removeAllimg('close'))
+                                                        }} className="li_image_close"/>
                                                 </li>
                                                 {/* image counting and remove all image list */}
-                                                <div onClick={() => setWindowRemoveAllImg(true)} className="images_counting">{`+${props.data.imagesPosts.length - 4}`}</div>
+                                                <div onClick={() => props.dispatch(toggle_window_removeAllimg('toggle'))} className="images_counting">{`+${props.data.imagesPosts.length - 4}`}</div>
                                             </>
                                             )
                                         }
@@ -620,7 +618,10 @@ function App(props) {
                                     {/*//! input addon wrapper */}
                                     <div className="input_addon_wrapper">
                                         {/* image */}
-                                        <span onClick={() => setWindowEmoji(false)}>
+                                        <span onClick={() => {
+                                            props.dispatch(toggle_window_emoji('close'));
+                                            props.dispatch(toggle_window_removeAllimg('close'))
+                                        }}>
                                             {/* button upload image */}
                                             <BsImages 
                                                 className="input_image"
@@ -637,14 +638,14 @@ function App(props) {
                                         </span>
                                     </div>
                                     {/*//! Window Remove All Images List in window input */}
-                                    <div className={windowRemoveAllImg !== false ? "removeALl_wrapper show" : "removeALl_wrapper close"}>
+                                    <div className={props.data.isWindowRemoveAllImg !== false ? "removeALl_wrapper show" : "removeALl_wrapper close"}>
                                         <button onClick={() => { 
                                             onImageRemoveAll() 
-                                            setWindowRemoveAllImg(false) 
+                                            props.dispatch(toggle_window_removeAllimg('close'))
                                         }}>Remove All</button>
-                                        <button onClick={() => setWindowRemoveAllImg(false)}>cancle</button>
+                                        <button onClick={() => props.dispatch(toggle_window_removeAllimg('toggle'))}>cancle</button>
                                     </div>
-                                    <div className={windowRemoveAllImg !== false ? "box_removeAll show" : "box_removeAll close"}></div>
+                                    <div className={props.data.isWindowRemoveAllImg !== false ? "box_removeAll show" : "box_removeAll close"}></div>
                                 </>
                             )}
                         </ImageUploading>
@@ -837,7 +838,7 @@ function App(props) {
                     {/* box */}
                     <div 
                         className={
-                            !windowEmoji
+                            !props.data.isWindowEmoji
                               ? "box-emojiPicker close"
                               : "box-emojiPicker show"
                         }                          
@@ -946,7 +947,7 @@ function App(props) {
                                                         <IoClose onClick={() => onImageRemove(index)} className="li_image_close"/>
                                                 </li>
                                                 {/* image counting and remove all image list */}
-                                                <div onClick={() => setWindowRemoveAllImg(true)} className="images_counting">{`+${props.data.imagesPosts.length - 4}`}</div>
+                                                <div onClick={() => props.dispatch(toggle_window_removeAllimg('toggle'))} className="images_counting">{`+${props.data.imagesPosts.length - 4}`}</div>
                                             </>
                                             )
                                         }
@@ -954,7 +955,7 @@ function App(props) {
                                     {/*//! input addon wrapper */}
                                     <div className="input_addon_wrapper">
                                         {/* image */}
-                                        <span onClick={() => setWindowEmoji(false)}>
+                                        <span onClick={() => props.dispatch(toggle_window_emoji('close'))}>
                                             {/* button upload image */}
                                             <BsImages 
                                                 className="input_image"
@@ -971,14 +972,14 @@ function App(props) {
                                         </span>
                                     </div>
                                     {/*//! Window Remove All Images List in window input */}
-                                    <div className={windowRemoveAllImg !== false ? "removeALl_wrapper show" : "removeALl_wrapper close"}>
+                                    <div className={props.data.isWindowRemoveAllImg !== false ? "removeALl_wrapper show" : "removeALl_wrapper close"}>
                                         <button onClick={() => { 
                                             onImageRemoveAll() 
-                                            setWindowRemoveAllImg(false) 
+                                            props.dispatch(toggle_window_removeAllimg('close')); 
                                         }}>Remove All</button>
-                                        <button onClick={() => setWindowRemoveAllImg(false)}>cancle</button>
+                                        <button onClick={() => props.dispatch(toggle_window_removeAllimg('close'))}>cancle</button>
                                     </div>
-                                    <div className={windowRemoveAllImg !== false ? "box_removeAll show" : "box_removeAll close"}></div>
+                                    <div className={props.data.isWindowRemoveAllImg !== false ? "box_removeAll show" : "box_removeAll close"}></div>
                                 </>
                             )}
                         </ImageUploading>
@@ -1100,7 +1101,6 @@ function App(props) {
                 getUploadImage={getUploadImage}
                 imagesPosts={props.data.imagesPosts}
                 getStatusFeeling={getStatusFeeling}  
-                statusInputMain={statusInputMain}
                 textInputPost={props.data.textInputPost}
                 countTextInputPost={props.data.countTextInputPost}
                 toggleWindowOptionPost={toggleWindowOptionPost}

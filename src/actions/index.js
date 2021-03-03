@@ -183,6 +183,20 @@ export const toggle_window_editPost = (status) => {
         statusWindowEditPost: status
     }
 }
+// Toggle Window Remove All Img
+export const toggle_window_removeAllimg = (status) => {
+    return {
+        type: "TOGGLE_WINDOW_REMOVEALLIMG",
+        statusWindowRemoveAllImg: status
+    }
+}
+// Toggle window Emoji
+export const toggle_window_emoji = (status) => {
+    return {
+        type: "TOGGLE_WINDOW_EMOJI",
+        statusWindowEmoji: status
+    }
+}
 //! ( End ) - Window
 
 

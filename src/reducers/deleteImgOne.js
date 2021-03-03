@@ -9,6 +9,8 @@ const initialstate = {
     isWindowNavbar: false,
     isWindowOptionPost: false,
     isWindowEditPost: false,
+    isWindowRemoveAllImg: false,
+    isWindowEmoji: false,
     // delete last img
     isDeleteLastImg: false,
     // index list images
@@ -258,6 +260,7 @@ const asyncDeleteImgOnWindowReducer = (state = initialstate, action) => {
                 })
             }
         break;
+        // toggle window Edit Post
         case "TOGGLE_WINDOW_EDITPOST":
             if(action.statusWindowEditPost === 'close') {
                 if(state.isWindowOptionPost === true) {
@@ -286,6 +289,45 @@ const asyncDeleteImgOnWindowReducer = (state = initialstate, action) => {
                     isWindowEditPost: !state.isWindowEditPost,
                     isWindowNavbar: false,
                     isWindowOptionPost: false
+                })
+            }
+        break;
+        // toggle window Remove All Img
+        case "TOGGLE_WINDOW_REMOVEALLIMG":
+            if(action.statusWindowRemoveAllImg === 'close') {
+                return Object.assign({}, state, {
+                    isWindowRemoveAllImg: false,
+                    isWindowEmoji: false
+                })
+            }
+            if(action.statusWindowRemoveAllImg === 'toggle') {
+                return Object.assign({}, state, {
+                    isWindowRemoveAllImg: !state.isWindowRemoveAllImg,
+                    isWindowEmoji: false
+                })
+            }
+            if(action.statusWindowRemoveAllImg === 'show') {
+                return Object.assign({}, state, {
+                    isWindowRemoveAllImg: true,
+                    isWindowEmoji: false
+                })
+            }
+        break;
+        // toggle window Remove All Img
+        case "TOGGLE_WINDOW_EMOJI":
+            if(action.statusWindowEmoji === 'close') {
+                return Object.assign({}, state, {
+                    isWindowEmoji: false
+                })
+            }
+            if(action.statusWindowEmoji === 'toggle') {
+                return Object.assign({}, state, {
+                    isWindowEmoji: !state.isWindowEmoji
+                })
+            }
+            if(action.statusWindowEmoji === 'show') {
+                return Object.assign({}, state, {
+                    isWindowEmoji: true
                 })
             }
         break;

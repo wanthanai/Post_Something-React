@@ -690,7 +690,7 @@
     border-radius:7px;
 
     position: absolute;
-    top: 46%;
+    top: 43.5%;
     right: 5px;
     padding: 5px;
 
@@ -743,15 +743,24 @@
 .box_removeAll.show 
 {
     position: absolute;
-    top: 218px;
-    right: 14%;
+    top: 49%;
+    right: 13%;
+    transform: rotate(135deg);
+    z-index: 99;
+    box-shadow: 1px -1px 1px #4e4c4c;
 
-    width: 15px;
-    height: 15px;
-    background: #ececec;
-
-    z-index: 0;
-    transform: rotate(45deg);
+    border-top-width: 6px;
+    border-bottom-style: solid;
+    border-top-color: #ececec;
+    border-left-style: solid;
+    border-left-width: 6px;
+    border-top-style: solid;
+    border-bottom-width: 6px;
+    border-right-color: #ececec;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-right-style: solid;
+    border-right-width: 6px;
 }
 /* box close */
 .box_removeAll.close 
