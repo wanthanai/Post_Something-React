@@ -1,0 +1,41 @@
+//! ( End ) - Posts 
+
+//! ( Posts ) - Reducer
+
+//! App
+
+//! Component
+
+//! Container 
+
+//! Function Another
+
+//! Function Component
+
+//! Main Component
+
+//! Map State To Props
+
+//! PropTypes
+
+//! PropTypes 
+
+//! State
+
+//! State Image
+
+//! container
+
+//! show edit post 
+
+//! show input post 
+
+//! useEffect
+
+//! useRef
+
+//! useSelector
+
+//! useState
+
+//! บัค id image เพราะ เมือใช้ function onImageRemove มันจะทำการ +idImage เพราะมันต้องผ่าน function นี้เสมอ แต่ยังไม่มีผลเสียอะไร 
