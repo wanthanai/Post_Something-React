@@ -3,13 +3,13 @@ import store from '../index';
 
 //! Action
 
+//! ( delete image ) - action 
 // Delete Last Image
 export const delete_last_img = () => {
     return {
         type: "DELETE_LAST_IMG"
     }
 }
-
 // Loading Delete One
 export const loading_deleteOne = () => {
     return {
@@ -28,30 +28,12 @@ export const loading_deleteLastImg_success = () => {
         type: "LOADING_DELETE_LAST_IMG_SUCCESS"
     }
 }
-
-
-// Toggle Window Delete Image
-export const toggle_window_delete_img = (status) => {
-    return {
-        type: "TOGGLE_WINDOW_DELETE_IMG",
-        status: status 
-    }
-}
-
 // Close Delete Success
 export const close_delete_one_success = () => {
     return {
         type: "CLOSE_DELETE_SUCCESS"
     }
 }
-
-// Window Show Image
-export const window_list_images_post = () => {
-    return {
-        type: "WINDOW_LIST_IMAGES_POST"
-    }
-}
-
 // Index List Images { increment, decrement }
 // Increment +
 export const increment_index_list_images = (index) => {
@@ -90,20 +72,13 @@ export const set_list_image_deleted = (img) => {
         imgDeleted: img
     }
 }
-
-// Toggle Window List Images Post
-export const toggle_window_list_imagesPost = () => {
-    return {
-        type: "TOGGLE_WINDOW_LIST_IMAGES_POST"
-    }
-}
-
 // ( delete all ) set list images post 
 export const set_list_images_post_deleteAll = () => {
     return{
         type: "SET_LIST_IMAGES_DELETEALL"
     }
 }
+//! ( End ) - Delete image
 
 //! ( Posts ) - action
 // setPosts 
@@ -141,6 +116,13 @@ export const set_feeling_status = (status) => {
         feelingStatus: status
     }
 }
+// Set Feeling Icon 
+export const set_feeling_icon = (url) => {
+    return{
+        type: "SET_FEELING_ICON",
+        feelingIcon: url
+    }
+}
 // Set Id Post Showing
 export const set_idPost_showing = (id) => {
     return{
@@ -148,6 +130,14 @@ export const set_idPost_showing = (id) => {
         idPostShowing: id
     }
 }
+// Set Status Post Button
+export const set_status_post_button = (status) => {
+    return{
+        type: "SET_STATUS_POST_BUTTON",
+        statusPostButton: status
+    }
+}
+//! ( End ) - Post
 
 //! ( Window ) - action
 // toggle window input post
@@ -157,7 +147,43 @@ export const toggle_window_input_post = (status) => {
         statusWindowInputPost: status
     }
 }
-
+// Toggle Window List Images Post
+export const toggle_window_list_imagesPost = (note) => {
+    return {
+        type: "TOGGLE_WINDOW_LIST_IMAGES_POST",
+        noteWindowListImagesPost: note
+    }
+}
+// Toggle Window Delete Image
+export const toggle_window_delete_img = (status) => {
+    return {
+        type: "TOGGLE_WINDOW_DELETE_IMG",
+        status: status 
+    }
+}
+// Toggle Window Option Post
+export const toggle_window_option_post = (status, id) => {
+    return {
+        type: "TOGGLE_WINDOW_OPTION_POST",
+        statusWindowOptionPost: status,
+        idOptionPost: id
+    }
+}
+// Toggle Window Navbar
+export const toggle_window_navbar = (status) => {
+    return {
+        type: "TOGGLE_WINDOW_NAVBAR",
+        statusWindowNavbar: status 
+    }
+}
+// Toggle Window Edit Post
+export const toggle_window_editPost = (status) => {
+    return {
+        type: "TOGGLE_WINDOW_EDITPOST",
+        statusWindowEditPost: status
+    }
+}
+//! ( End ) - Window
 
 
 
@@ -188,7 +214,19 @@ export const thunk_action_deleteOne = () => {
                         }
                     }
                 }
-            }            
+            }     
+            
+            // if only pictures - ( ถ้ามีแต่รูป ) => ก็จะให้ลบโพสไปด้วย
+            for(let i = 0; i < posts.length; i++) {
+                if(posts[i].idPost === idPostShowing) {
+                    if(posts[i].textInputPost === '') {
+                        if(posts[i].imagesPosts.length === 0) {
+                            posts.splice(i, 1);
+                        }
+                    }
+                }
+            }
+            
         }, 1200)
         setTimeout(() => {
             dispatch(close_delete_one_success());
@@ -225,7 +263,19 @@ export const thunk_action_deleteLastImg = () => {
                         }
                     }
                 }
-            }            
+            }      
+            
+            // if only pictures - ( ถ้ามีแต่รูป ) => ก็จะให้ลบโพสไปด้วย
+            for(let i = 0; i < posts.length; i++) {
+                if(posts[i].idPost === idPostShowing) {
+                    if(posts[i].textInputPost === '') {
+                        if(posts[i].imagesPosts.length === 0) {
+                            posts.splice(i, 1);
+                        }
+                    }
+                }
+            }
+
         }, 1200)
         setTimeout(() => {
             // close delete success
@@ -261,7 +311,19 @@ export const thunk_action_oneImageLeft = () => {
                         }
                     }
                 }
-            }                        
+            }             
+            
+            // if only pictures - ( ถ้ามีแต่รูป ) => ก็จะให้ลบโพสไปด้วย
+            for(let i = 0; i < posts.length; i++) {
+                if(posts[i].idPost === idPostShowing) {
+                    if(posts[i].textInputPost === '') {
+                        if(posts[i].imagesPosts.length === 0) {
+                            posts.splice(i, 1);
+                        }
+                    }
+                }
+            }
+            
         }, 1200)
         setTimeout(() => {
             // close delete success
@@ -291,7 +353,17 @@ export const thunk_action_deleteAll = () => {
                 if(posts[i].idPost === idPostShowing) {
                     posts[i].imagesPosts.splice(0, posts[i].imagesPosts.length);
                 }
-            }                        
+            }
+            
+            // if only pictures - ( ถ้ามีแต่รูป ) => ก็จะให้ลบโพสไปด้วย
+            for(let i = 0; i < posts.length; i++) {
+                if(posts[i].idPost === idPostShowing) {
+                    if(posts[i].textInputPost === '') {
+                        posts.splice(i, 1);
+                    }
+                }
+            }
+
         }, 1200)
         setTimeout(() => {
             // close delete success
@@ -305,11 +377,31 @@ export const thunk_action_deleteAll = () => {
 // Set Posts ( thunk middleware )
 let idPost = 1;
 export const thunk_action_setPosts = () => {
+
+    const month = new Date().toLocaleString('default', {month: 'long'});
+    const day = new Date().getDate();
+    var postHours = new Date().getHours();
+    var postMinutes = new Date().getMinutes();
+
+    var ampm;
+    if(postHours => 12) ampm = 'PM'
+    else ampm = 'AM' 
+
+    postHours = postHours % 12;
+    postHours = postHours ? postHours : 12; // ถ้า Hours = 0 จะให้เท่ากับ 12 / สมติว่าเที่ยงคือ 00:00 ก็จะเปลี่ยนเป็น 12
+    postMinutes = postMinutes < 10 ? '0'+postMinutes : postMinutes;
+    var strTime = `${month} ${day} at ${postHours}:${postMinutes} ${ampm}`
+
+    // state
+    var minutePost = 0;
+    var hourPost = 0;
+
     return (dispatch, getState) => {
         // getState
-        const {textInputPost, imagesPosts, posts} = getState();
-        const newPost = {idPost, textInputPost, imagesPosts};
-
+        const {textInputPost, imagesPosts, posts, feelingStatus, feelingIcon} = getState();
+    
+        // new Post
+        const newPost = {idPost, textInputPost, imagesPosts, feelingStatus, feelingIcon, strTime, minutePost, hourPost};
         dispatch(set_posts([newPost, ...posts]));
         idPost++
         // close window input post
@@ -321,5 +413,103 @@ export const thunk_action_setPosts = () => {
         dispatch(set_text_input_post(''));
         dispatch(set_images_posts([]));
         dispatch(set_feeling_status('?'));
+        dispatch(set_feeling_icon(''));
+    }
+}
+
+//! Delete Photo - ( Middleware )
+export const thunk_action_deletePhoto = (idPost, img, title) => {
+    return (dispatch, getState) => {
+        const { posts } = getState();
+
+        // img < = 2
+        if(img.length <= 2) {
+            // title = 0
+            if(title.length !== 0) {
+                for(let i = 0; i < posts.length; i++) {
+                    if(posts[i].idPost === idPost) {
+                        for(let q = 0; q < posts[i].imagesPosts.length; q++) {
+                            if(posts[i].imagesPosts[q].id === img[q].id) {
+                                posts[i].imagesPosts.splice(q, posts[i].imagesPosts.length);
+
+                                //close window option post
+                                dispatch(toggle_window_option_post('close', 0));
+                            }
+                        }
+                    }
+                }
+            } else {
+                for(let i = 0; i < posts.length; i++) {
+                    if(posts[i].idPost === idPost) {
+                        posts.splice(i, 1);
+
+                        //close window option post
+                        dispatch(toggle_window_option_post('close', 0));
+                    }
+                }
+            }
+        }
+
+        // img > 2
+        if(img.length > 2) {
+            dispatch(set_list_images_post(img));
+            dispatch(toggle_window_list_imagesPost('onBtn-optionPost'));
+        }
+    }
+} 
+
+//! Delete Post - ( Middleware )
+export const thunk_action_deletePost = (idPost) => {
+    return (dispatch, getState) => {
+        const { posts } = getState();
+
+        for(let i = 0; i < posts.length; i++) {
+            if(posts[i].idPost === idPost) {
+                posts.splice(i, 1);
+
+                // close window Option Post
+                dispatch(toggle_window_option_post('close', 0));
+            }
+        }
+    }
+}
+
+//! Edit Post - ( Middleware )
+// window
+export const thunk_action_editPost = (title, idPost, feelingStatus, img, feelingIcon) => {
+    return (dispatch, getState) => {
+        dispatch(toggle_window_editPost('toggle'));
+        dispatch(set_text_input_post(title));
+        dispatch(set_feeling_status(feelingStatus));
+        dispatch(set_images_posts(img));
+        dispatch(set_idPost_showing(idPost));
+        dispatch(set_feeling_icon(feelingIcon));
+    }
+}
+// Save Edit Post
+export const thunk_action_save_editPost = () => {
+    return (dispatch, getState) => {
+        const { posts, imagesPosts, textInputPost, feelingStatus, idPostShowing, feelingIcon } = getState();
+
+        for(let i = 0; i < posts.length; i++) {
+            if(posts[i].idPost === idPostShowing) {
+                if(imagesPosts.length === 0 && textInputPost.length === 0) {
+                    posts.splice(i, 1);
+                    // close window Edit Post
+                    dispatch(toggle_window_editPost('close'));
+                } else {
+                    posts[i].textInputPost = textInputPost;
+                    posts[i].feelingStatus = feelingStatus;
+                    // posts[i].imagesPosts.splice(0, posts[i].imagesPosts.length);
+                    posts[i].imagesPosts = imagesPosts;  
+                    posts[i].feelingIcon = feelingIcon   
+                    
+                    // close window Edit Post
+                    dispatch(toggle_window_editPost('close'));
+                }
+            }
+        }
+
+        console.log('Save Edit!');
     }
 }

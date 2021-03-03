@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 // Style
 import "./App.css";
+import "./component/responsive.css"
 import feelingJSON from './feeling';
 // Component
 import Navbar from "./component/Navbar";
@@ -21,8 +22,6 @@ import TextareaAutosize from "react-textarea-autosize";
 // Emoji-picker
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
-// Tooltip
-import ReactTooltip from 'react-tooltip';
 // Images uploading
 import ImageUploading from 'react-images-uploading';
 // Alert Message
@@ -34,7 +33,8 @@ import { connect } from 'react-redux';
 import 
 {   thunk_action_deleteOne, thunk_action_deleteLastImg, toggle_window_delete_img, increment_index_list_images, decrement_index_list_images, set_index_list_images,
     set_list_images_post, thunk_action_oneImageLeft, toggle_window_list_imagesPost, thunk_action_deleteAll, thunk_action_setPosts, set_text_input_post, set_images_posts,
-    toggle_window_input_post, set_count_text_input_post, set_feeling_status, set_idPost_showing
+    toggle_window_input_post, set_count_text_input_post, set_feeling_status, set_idPost_showing, set_feeling_icon, set_status_post_button, toggle_window_option_post,
+    toggle_window_navbar, thunk_action_deletePhoto, thunk_action_deletePost, thunk_action_editPost, toggle_window_editPost, thunk_action_save_editPost
 } 
 from './actions/index';
 
@@ -67,6 +67,8 @@ function App(props) {
     // State Slide 
     const [slideResult, setSlideResult] = useState('');
     const [slideSize, setSlideSize] = useState('');
+    const [slideSizeEditPost, setSlideSizeEditPost] = useState('');
+    const [slideResultEditPost, setSlideResultEditPost] = useState('');
     // State Feeling
     const [feelingItems, setFeelingItems] = useState([]);
     // Search Term
@@ -75,20 +77,17 @@ function App(props) {
     const [statusInputMain, setStatusInputMain] = useState(false);
 
 
-    //! Posts
-    const posts = props.data.posts
-    console.log(props.data.posts);
-    console.log(props.data.idPostShowing);
-
     //! useAlert();
     const alert = useAlert();
 
     //! useRef
     const inputPostRef = useRef(null);
     const slideItem = useRef(null);
+    const slideItemEditPost = useRef(null);
 
     //! useEffect
     useEffect(() => {});
+
 
     //! Function Another
     //* 1. get info from Navbar
@@ -100,18 +99,25 @@ function App(props) {
     //* 2. onClick show image
     const onClickShowImage = (urlImg) => {
       setUrlShowImage(urlImg);
+      // close window option post
+      props.dispatch(toggle_window_option_post('close', 0));
+      // clse window Navbar
+      props.dispatch(toggle_window_navbar('close'));
+      // html overflow hidden
+      document.querySelector('html').style.overflow = 'hidden';
     };
   
     //* 3. onClick close image
     const onClickCloseImage = () => {
       setUrlShowImage("");
+        // html overflow unset
+        document.querySelector('html').style.overflow = 'unset';
     };
 
     //* 4. Change font size input Post
     const rowCount = (evt) => {
         props.dispatch(set_text_input_post(evt.target.value));
         // console.log(evt.target.value);
-
         
         // count number of characters without spaces and enters
         let myStringInputPost = evt.target.value;
@@ -121,7 +127,6 @@ function App(props) {
         // console.log(`Space Count:- ${spaceCount}`);
         // console.log(`total count:- ${(myStringInputPost.length - spaceCount) - enterCount}`);
         props.dispatch(set_count_text_input_post((myStringInputPost.length - spaceCount)- enterCount));
-
 
         let row = evt.target.offsetHeight;
         //   console.log(evt.target.offsetHeight);
@@ -136,6 +141,17 @@ function App(props) {
             setFontSizeInput("big");
           } 
         }
+        
+        // set status post button
+        if(evt.target.value.length !== 0) {
+            props.dispatch(set_status_post_button(true));
+        } else props.dispatch(set_status_post_button(false));
+
+        if(evt.target.value.length === 0) {
+            if(props.data.imagesPosts.length !== 0) {
+                props.dispatch(set_status_post_button(true));
+            } else props.dispatch(set_status_post_button(false));            
+        } 
     };
   
     //* 5. Add Emoji
@@ -157,17 +173,31 @@ function App(props) {
   
     //* 7. Get Status and Open Window Input Post
     const getWindowInput = (inputProfileName) => {
-      //   console.log(statusWindowInput);
-      if (inputProfileName !== "") props.dispatch(toggle_window_input_post(true));
-      else {
-        alert.error(<div className="alert_error">Please enter your name first.</div>)
-        props.dispatch(toggle_window_input_post(false));
-      } 
+        // set Status Post Button 
+        if(props.data.imagesPosts.length !== 0) {
+            props.dispatch(set_status_post_button(true));
+        }
+        if(props.data.imagesPosts.length === 0) {
+            if(props.data.countTextInputPost !== 0) {
+                props.dispatch(set_status_post_button(true));
+            } else props.dispatch(set_status_post_button(false)); 
+        } 
+        
+        // alert error 
+        if (inputProfileName !== "") {
+            props.dispatch(toggle_window_input_post(true));
+            document.querySelector('html').style.overflow = 'hidden';
+        }
+        else {
+          alert.error(<div className="alert_error">Please enter your name first.</div>)
+          props.dispatch(toggle_window_input_post(false));
+        } 
     };
   
     //* 8. Close Input Post
     const closeInputPost = () => {  
         props.dispatch(toggle_window_input_post(false));
+
     };
   
     //* 9. handle image change  
@@ -206,15 +236,36 @@ function App(props) {
         }) //! บัค id image เพราะ เมือใช้ function onImageRemove มันจะทำการ +idImage เพราะมันต้องผ่าน function นี้เสมอ แต่ยังไม่มีผลเสียอะไร 
 
         props.dispatch(set_images_posts(imageListTemp));
+
+        // set status post button
+        if(imageList.length !== 0) {
+            props.dispatch(set_status_post_button(true));
+        }
+        if(imageList.length === 0) {
+            if(props.data.countTextInputPost !== 0) {
+                props.dispatch(set_status_post_button(true));
+            } else props.dispatch(set_status_post_button(false)); 
+        } 
+        
+        
     }; 
 
 
     //* 11 Slide Next
-    const slideRightFunc = () => {
+    // async important!
+    const slideRightFunc = async() => {
         // console.log(slideItem.current.clientWidth);
         setFeelingItems(feelingJSON.feelings);
         setSlideSize(slideItem.current.clientWidth);
         setSlideResult('right');
+        setWindowEmoji(false);
+    }
+    //* 11.1 slide Next - ( Edit Post )
+    const slideRightEditPost = async() => {
+        // console.log(slideItem.current.clientWidth);
+        setFeelingItems(feelingJSON.feelings);
+        setSlideSizeEditPost(slideItemEditPost.current.clientWidth);
+        setSlideResultEditPost('right');
         setWindowEmoji(false);
     }
 
@@ -223,6 +274,12 @@ function App(props) {
         // console.log(slideItem.current.clientWidth);
         setSlideSize(slideItem.current.clientWidth);
         setSlideResult('left');
+    }
+    //* 12.1 slide Previous
+    const slideLeftEditPost = () => {
+        // console.log(slideItem.current.clientWidth);
+        setSlideSizeEditPost(slideItemEditPost.current.clientWidth);
+        setSlideResultEditPost('left');
     }
 
     //* 13. Get Status Upload Image from PostHasImg Component
@@ -247,12 +304,15 @@ function App(props) {
             props.dispatch(toggle_window_input_post(statusBool));
         }
         
+        // allow status post button
+        props.dispatch(set_status_post_button(true));
+
     }
     //* 14. Get Status Feeling
     const getStatusFeeling = async(statusBool) => {
         if(statusBool === true && inputProfileName !== '') {
-            props.dispatch(toggle_window_input_post(statusBool));
-            slideRightFunc();
+            await props.dispatch(toggle_window_input_post(statusBool));
+            await slideRightFunc();
         } else {
             alert.error(<div className="alert_error">Please enter your name first.</div>)
         }
@@ -292,68 +352,6 @@ function App(props) {
         } 
     }
 
-    //* 19. Delete One, List Images Post or Filter
-    // const deleteOneListImagesPost = (timeout, set1, set2, set3) => {
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             if(set1 !== null) {
-    //                 resolve();
-    //             }
-    //         }, timeout)
-    //     })
-    // }
-    //* 19.1 Run
-    // const RundeleteOneListImagesPost = async() => {
-    //     try {
-    //         await deleteOneListImagesPost(0, setListImageDeleted(listImagesPost.filter(img => img.data_url === listImagesPost[indexListImages].data_url)));
-    //         if(listImagesPost.length - 1 !== 0) {
-    //             if(indexListImages === listImagesPost.length -1) {
-    //                 await deleteOneListImagesPost(0, setIndexDeleteLastImage(true));
-    //                 await deleteOneListImagesPost(1000, setWindowLoadingDeleteOne(true));
-    //                 await deleteOneListImagesPost(0, setWindowDeleteImg(false));
-    //                 await deleteOneListImagesPost(0, setListImagesPost(listImagesPost.filter(img => img.data_url !== listImagesPost[indexListImages].data_url)));
-    //                 await deleteOneListImagesPost(0, setWindowLoadingDeleteOne(false))
-    //                 await deleteOneListImagesPost(0, newPostWhenImgDeleted());
-    //                 await deleteOneListImagesPost(500, setWindowLoadingDeleteOneSuccess(true))
-    //                 await deleteOneListImagesPost(0, setWindowLoadingDeleteOneSuccess(false));
-    //                 await deleteOneListImagesPost(0, setIndexListImages(0));
-    //                 await deleteOneListImagesPost(0, setIndexDeleteLastImage(false));
-    //             } else {
-    //                 await deleteOneListImagesPost(1000, setWindowLoadingDeleteOne(true));
-    //                 await deleteOneListImagesPost(0, setWindowDeleteImg(false));
-    //                 await deleteOneListImagesPost(0, setListImagesPost(listImagesPost.filter(img => img.data_url !== listImagesPost[indexListImages].data_url)));
-    //                 await deleteOneListImagesPost(0, setWindowLoadingDeleteOne(false));
-    //                 await deleteOneListImagesPost(0, newPostWhenImgDeleted());
-    //                 await deleteOneListImagesPost(500, setWindowLoadingDeleteOneSuccess(true));
-    //                 await deleteOneListImagesPost(0, setWindowLoadingDeleteOneSuccess(false));
-    //             }
-    //         } else {
-    //             await deleteOneListImagesPost(1500, setWindowLoadingDeleteOne(true));
-    //             await deleteOneListImagesPost(0, setWindowLoadingDeleteOne(false));
-    //             await deleteOneListImagesPost(500, setWindowLoadingDeleteOneSuccess(true));
-    //             await deleteOneListImagesPost(0, setWindowLoadingDeleteOneSuccess(false));
-    //             await deleteOneListImagesPost(0, setWindowDeleteImg(false));
-    //             await deleteOneListImagesPost(0, setWindowListImagesPost(false));
-    //         }
-    //     } catch(err) {
-    //         console.error(err);
-    //     }
-
-    // }
-    // * 19.1 setPost when delete list img
-    // const newPostWhenImgDeleted = () => {
-    //     // filter delete img list and setState 
-    //     if(props.data.listImageDeleted.length !== 0) {
-    //         for(let i = 0; i < posts.length; i++) {
-    //             for(let q = 0; q < posts[i].imagesPosts.length; q++) {
-    //                 if(q === props.data.indexListImages) {
-    //                     posts[i].imagesPosts.splice(props.data.indexListImages - 1, 1);
-    //                 }
-    //             }
-    //         }
-    //         console.log('delete success!');
-    //     }
-    // }
     //* 19. Delete One, List Images Post or Filter
     const deleteOneListImagesPost = () => {
         // listImages !== 0
@@ -400,6 +398,48 @@ function App(props) {
         props.dispatch(set_list_images_post(images));
     }
 
+    //* 25. when Clear button is CLicked on Navbar, it will Clear Input Post
+    const clearStatusFeeling = () => {
+        props.dispatch(set_feeling_status('?'));
+    } 
+    const clearImagesPost = () => {
+        props.dispatch(set_images_posts([]));
+    }
+
+    //* 26. Toggle window Option Post
+    const toggleWindowOptionPost = (status, id) => {
+        props.dispatch(toggle_window_option_post(status, id));
+    }
+
+    //* 27. Toggle Window Navbar
+    const toggleWindowNavbar = (status) => {
+        props.dispatch(toggle_window_navbar(status));
+    }
+
+    //* 28. Delete Photo on Post
+    const deletePhotoOnPost = (idPost, img, title) => {
+        props.dispatch(thunk_action_deletePhoto(idPost, img, title));
+    }
+
+    //* 29. Delete Post
+    const deletePost = (idPost) => {
+        props.dispatch(thunk_action_deletePost(idPost));
+    }
+
+    //* 30. Edit Post
+    const EditPost = (title, idPost, feelingStatus, img, feelingIcon) => {
+        props.dispatch(thunk_action_editPost(title, idPost, feelingStatus, img, feelingIcon));
+    }
+
+    //* 31. Close Edit Post 
+    const closeEditPost = () => {
+        props.dispatch(toggle_window_editPost('close'));
+    }
+
+    //* 32. Save Edit Post
+    const saveEditPost = () => {
+        props.dispatch(thunk_action_save_editPost());
+    }
 
 
     //! Small Component
@@ -430,16 +470,7 @@ function App(props) {
             <GrEmoji 
                 onClick={toggleEmoji} 
                 className="emoji_toggle" 
-                data-tip="emoji" 
-                data-delay-show="300" 
-                data-effect="solid" 
-                data-type="light" 
-                data-border="true"
-                data-text-color="#000"
-                data-background-color="rgb(209, 208, 208, 1)"
-                data-border-color="rgb(109, 109, 109)"
             />
-            <ReactTooltip />
         </>
     );
     
@@ -451,7 +482,7 @@ function App(props) {
             ? "emoji_picker_wrapper close"
             : "emoji_picker_wrapper show"
         }
-        style={props.data.imagesPosts.length !== 0 ? {bottom: '53%'} : {bottom: '38%'}}
+        style={props.data.imagesPosts.length !== 0 ? {bottom: '59%'} : {bottom: '44%'}}
       >
         <Picker className="emoji_picker" onSelect={addEmoji} />
       </span>
@@ -468,6 +499,16 @@ function App(props) {
                 {/*//! emoji picker */}
                 <div className="emoji_picker_container">
                     {emojiPicker} {/* small component */}
+
+                    {/* box */}
+                    <div 
+                        className={
+                            !windowEmoji
+                              ? "box-emojiPicker close"
+                              : "box-emojiPicker show"
+                        }                          
+                        style={props.data.imagesPosts.length !== 0 ? {top: '38.6%', right: '4.7%'} : {top: '54%', right: '4.7%'}}
+                    ></div>
                 </div>
 
                 {/* //! Slide / main show input wrapper */}
@@ -514,8 +555,8 @@ function App(props) {
                                 className="input_textarea"
                                 placeholder={
                                   !inputProfileName
-                                    ? "thinking ?"
-                                    : `thinking ? ${inputProfileName}`
+                                    ? "your mind?"
+                                    : `your mind ${inputProfileName}?`
                                 }
                                 ref={inputPostRef}
                                 onChange={rowCount}
@@ -584,17 +625,7 @@ function App(props) {
                                             <BsImages 
                                                 className="input_image"
                                                 onClick={onImageUpload}
-                                                // tooltip
-                                                data-delay-show="300" 
-                                                data-effect="solid" 
-                                                data-type="light" 
-                                                data-tip="image" 
-                                                data-border="true"
-                                                data-text-color="#000"
-                                                data-background-color="rgb(209, 208, 208, 1)"
-                                                data-border-color="rgb(109, 109, 109)"
                                             />
-                                            <ReactTooltip />
                                         </span>
                                         {/* feeling */}
                                         <span>
@@ -602,17 +633,7 @@ function App(props) {
                                             <RiEmotionLaughLine 
                                                 onClick={slideRightFunc}
                                                 className="input_feeling" 
-                                                // tootip
-                                                data-delay-show="300" 
-                                                data-effect="solid" 
-                                                data-type="light" 
-                                                data-tip="feelings" 
-                                                data-border="true"
-                                                data-text-color="#000"
-                                                data-background-color="rgb(209, 208, 208, 1)"
-                                                data-border-color="rgb(109, 109, 109)"
                                             />
-                                            <ReactTooltip />
                                         </span>
                                     </div>
                                     {/*//! Window Remove All Images List in window input */}
@@ -629,8 +650,13 @@ function App(props) {
                         </ImageUploading>
 
                         {/* Post Button */}
-                        <button onClick={addPost}>Post</button>
-
+                        <div className="button_post-wrapper">
+                            <button 
+                                className={props.data.statusPostButton ? 'button_post true' : 'button_post false'} 
+                                onClick={props.data.statusPostButton ? () => addPost() : null}
+                            >Post
+                            </button>
+                        </div>
                     </div>
 
                     {/*//! Slide Item */}
@@ -684,6 +710,7 @@ function App(props) {
                                         key={key}
                                         onClick={() => {
                                             props.dispatch(set_feeling_status(value.feeling_name));
+                                            props.dispatch(set_feeling_icon(value.icon));
                                             setSlideResult('left');
                                         }}
                                     >   
@@ -796,6 +823,256 @@ function App(props) {
         </div>
     )
 
+    //* 4. Show Edit Post
+    const showEditPost = (
+        //! show edit post 
+        <div className={!props.data.isWindowEditPost ? "main_show_input close" : "main_show_input show"
+        }>  
+            <div className="main_show_input_container">
+
+                {/*//! emoji picker */}
+                <div className="emoji_picker_container">
+                    {emojiPicker} {/* small component */}
+
+                    {/* box */}
+                    <div 
+                        className={
+                            !windowEmoji
+                              ? "box-emojiPicker close"
+                              : "box-emojiPicker show"
+                        }                          
+                        style={props.data.imagesPosts.length !== 0 ? {top: '38.6%', right: '4.7%'} : {top: '54%', right: '4.7%'}}
+                    ></div>
+                </div>
+
+                {/* //! Slide / main show input wrapper */}
+                <div className="main_show_input_wrapper"
+                    // Balance of height 
+                    style={slideResultEditPost === 'right' ? {height: '329px'} : {height: 'auto'}}
+                >
+
+                    {/*//! Slide Item */}
+                    <div 
+                        className="slide_item" 
+                        ref={slideItemEditPost}
+                        style={
+                            slideResultEditPost === 'right' 
+                            ? {transform: `translateX(-${slideSizeEditPost+2}px)`}
+                            : {transform: `translateX(-0px)`}
+                        }
+                        >
+
+                        {/* input header */}
+                        <div className="show_input_header">
+                            {/* header text */}
+                                <p>Edit Post</p>
+                            {/* btn close */}
+                            <div className="btn_close_input">
+                                {/* close input post */}
+                                <AiFillCloseCircle
+                                    onClick={closeEditPost}
+                                    className="icon_close_input"
+                                />
+                            </div>
+                        </div>
+
+                        {/* feeling status */}
+                        <div className="feeling_status">
+                            <p>{inputProfileName} feeling : <span>{props.data.feelingStatus}</span></p>
+                        </div> 
+
+                        {/* input main */}
+                        <div className="show_input_main">
+                            <TextareaAutosize
+                                minRows={fontSizeInput === 'big' ? 6 : 9}
+                                maxRows={15}
+                                className="input_textarea"
+                                placeholder={
+                                  !inputProfileName
+                                    ? "your mind?"
+                                    : `your mind ${inputProfileName}?`
+                                }
+                                ref={inputPostRef}
+                                onChange={rowCount}
+                                value={props.data.textInputPost}
+                                style={{
+                                  fontSize: fontSizeInput === "big" ? "1.3em" : "0.9em",
+                                }}
+                            />
+                            {/*//! emoji toggle */}
+                            {emojiToggle} {/* small component */}
+                        </div>
+                        {/*//! Show image Input Post */}
+                        <ImageUploading
+                            multiple
+                            value={props.data.imagesPosts}
+                            onChange={handleImageChange}
+                            maxNumber={maxNumber}
+                            dataURLKey="data_url"
+                            acceptType={acceptType}
+                            maxFileSize={4194304}
+                        >
+                            {({
+                                imageList,
+                                onImageUpload,
+                                onImageRemoveAll,
+                                onImageUpdate,
+                                onImageRemove,
+                                isDragging,
+                                dragProps,
+                            }) => (
+                                <>
+                                    <ul className="image_input_post">
+                                        {props.data.imagesPosts.length <= 4 
+                                            ? 
+                                            props.data.imagesPosts.map((image, index) => 
+                                                <li 
+                                                    className="li_images"
+                                                    key={index} 
+                                                    id={index} 
+                                                    style={{background: `url(${image.data_url}) no-repeat center/cover`}}
+                                                >
+                                                    <IoClose onClick={() => onImageRemove(index)} className="li_image_close"/>
+                                                </li>
+                                            )
+                                            : 
+                                            props.data.imagesPosts.map((image, index) =>
+                                            <> 
+                                                <li 
+                                                    className={props.data.imagesPosts.length > 4 ? "li_images checkLength nPlus5CLose" : "li_images"} 
+                                                    key={index} 
+                                                    id={index} 
+                                                    style={{background: `url(${image.data_url}) no-repeat center/cover`}}>
+                                                        <IoClose onClick={() => onImageRemove(index)} className="li_image_close"/>
+                                                </li>
+                                                {/* image counting and remove all image list */}
+                                                <div onClick={() => setWindowRemoveAllImg(true)} className="images_counting">{`+${props.data.imagesPosts.length - 4}`}</div>
+                                            </>
+                                            )
+                                        }
+                                    </ul>    
+                                    {/*//! input addon wrapper */}
+                                    <div className="input_addon_wrapper">
+                                        {/* image */}
+                                        <span onClick={() => setWindowEmoji(false)}>
+                                            {/* button upload image */}
+                                            <BsImages 
+                                                className="input_image"
+                                                onClick={onImageUpload}
+                                            />
+                                        </span>
+                                        {/* feeling */}
+                                        <span>
+                                            {/* button feeling */}
+                                            <RiEmotionLaughLine 
+                                                onClick={slideRightEditPost}
+                                                className="input_feeling" 
+                                            />
+                                        </span>
+                                    </div>
+                                    {/*//! Window Remove All Images List in window input */}
+                                    <div className={windowRemoveAllImg !== false ? "removeALl_wrapper show" : "removeALl_wrapper close"}>
+                                        <button onClick={() => { 
+                                            onImageRemoveAll() 
+                                            setWindowRemoveAllImg(false) 
+                                        }}>Remove All</button>
+                                        <button onClick={() => setWindowRemoveAllImg(false)}>cancle</button>
+                                    </div>
+                                    <div className={windowRemoveAllImg !== false ? "box_removeAll show" : "box_removeAll close"}></div>
+                                </>
+                            )}
+                        </ImageUploading>
+
+                        {/* Post Button */}
+                        <div className="button_post-wrapper">
+                            <button 
+                                className="button_post true" 
+                                onClick={saveEditPost}
+                            >Save
+                            </button>
+                        </div>
+                    </div>
+
+                    {/*//! Slide Item */}
+                    <div 
+                        className="slide_item"
+                        style={
+                            slideResultEditPost === 'right' 
+                            ? {transform: `translateX(-${slideSizeEditPost}px)`}
+                            : {transform: `translateX(${slideSizeEditPost+2}px)`}
+                        }
+                    >
+                        {/*//! Feeling Window Input Post */}
+                        {/* header */}
+                        <div className="feeling_header">
+                            {/* Button Slide Left / Previous */}
+                            <div className="feeling_slide_back_wrapper">
+                                <IoArrowBackOutline
+                                    onClick={slideLeftEditPost}
+                                    className="feeling_slide_back"
+                                />
+                            </div>
+                            {/* text header */}
+                            <p className="text_header">Feelings</p>
+                        </div>
+
+                        {/* search feeling */}
+                        <div className="search_feeling_wrapper">
+                            <input 
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="search_feeling" 
+                                type="text" 
+                                placeholder="Search" 
+                            />
+                            <BiSearchAlt className="search_icon_feeling"/>
+                        </div>
+
+                        {/* feeling items */} 
+                        <ul className="feelings_items_wrapper">
+                            {/* Search filter */}
+                            {feelingItems.filter((value) => {
+                                if(searchTerm === "") {
+                                    return value;
+                                } else if (value.feeling_name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                    return value;
+                                } 
+                            }).map((value, key) => {
+                                // console.log(value);
+                                return (
+                                    <li 
+                                        className="feeling_item"
+                                        key={key}
+                                        onClick={() => {
+                                            props.dispatch(set_feeling_status(value.feeling_name));
+                                            props.dispatch(set_feeling_icon(value.icon));
+                                            setSlideResultEditPost('left');
+                                        }}
+                                    >   
+                                        <span className="feeling_icon">
+                                            <img src={value.icon} alt="feeling-icon" />
+                                        </span> 
+                                        {value.feeling_name}
+                                    </li>
+                                )    
+                                }
+                            )}
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    ) 
+    
+    //* 5. Footer - ( copyright )
+    const copyright = (
+    
+        <div className="footer_copyright">
+            <p>Wanthanai K. © 2021</p>
+        </div>
+
+    )
+    
 
 
 
@@ -807,6 +1084,12 @@ function App(props) {
             <Navbar 
                 getInfoNavbar={getInfoNavbar} 
                 getStatusInputPost={getStatusInputPost}
+                clearStatusFeeling={clearStatusFeeling}
+                clearImagesPost={clearImagesPost}
+                toggleWindowOptionPost={toggleWindowOptionPost}
+                isWindowNavbar={props.data.isWindowNavbar}
+                toggleWindowNavbar={toggleWindowNavbar}
+                onClickCloseImage={onClickCloseImage}
             />
             {/* Input */}
             <Input
@@ -820,9 +1103,11 @@ function App(props) {
                 statusInputMain={statusInputMain}
                 textInputPost={props.data.textInputPost}
                 countTextInputPost={props.data.countTextInputPost}
+                toggleWindowOptionPost={toggleWindowOptionPost}
             />
             {/* Post */}
             {props.data.posts.map((post) => {
+                const feelingStatus = post.feelingStatus.toLowerCase();
                 return(
                     <PostHasImg 
                     inputProfileImg={inputProfileImg} 
@@ -832,11 +1117,20 @@ function App(props) {
                     idPost={post.idPost}
                     img={post.imagesPosts}
                     title={post.textInputPost}
-                    setUrlShowImage={setUrlShowImage}
+                    feelingStatus={feelingStatus}
+                    feelingIcon={post.feelingIcon}
+                    strTime={post.strTime}
+                    minutePost={post.minutePost}
+                    hourPost={post.hourPost}
+                    timeNow={props.data.timeNow}
                     setListImagesPost={setListImagesPost}
                     openWindowListImagesPost={openWindowListImagesPost}
                     receiveIdPost={receiveIdPost}
                     setIndexListImages={setIndexListImages}
+                    toggleWindowOptionPost={toggleWindowOptionPost}
+                    deletePhotoOnPost={deletePhotoOnPost}
+                    deletePost={deletePost}
+                    EditPost={EditPost}
                 />
                 ) 
             })}
@@ -844,11 +1138,17 @@ function App(props) {
             {/*//! main show background and image */}
             {showBackgroundAndImage} {/* small component */}
           
-            {/* //! main show input */}
+            {/*//! main show input */}
             {showInputPost} {/* small component */}
           
             {/*//! Show List Images Post */}
             {ShowListImagePost} {/* small component */}
+
+            {/*//! Show Edit Post */}
+            {showEditPost} {/* small component */}
+
+            {/*//! Footer - (Copyright) */}
+            {copyright}
         </div>
     );
 

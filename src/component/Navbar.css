@@ -18,13 +18,13 @@
     top: 0px;
     left: 0px;
     /* border: 1px solid red; */
-
+    background: #282729;
     z-index: 99;
 }
 .navbar_wrapper
 {
     position: relative;
-    background: #e3c9f1;
+    background: #282729;
 
 }
 .navbar_header {
@@ -37,12 +37,16 @@
     align-items: center;
 
     padding: 0rem 2rem; 
-    /* border-bottom-right-radius: 7px; */
-    /* border-bottom-left-radius: 7px; */
+    border-bottom-right-radius: 9px;
+    border-bottom-left-radius: 9px;
 
     background: #8463c3;
     box-shadow: 3px 0px 10px rgb(0, 0, 0, 0.4);
     z-index: 10;
+}
+.navbar_header a::selection
+{
+    pointer-events: none;
 }
 .navbar_header a {
     font-size: 20px;
@@ -120,6 +124,13 @@
     font-size: 15px;
     color: #fff;
     letter-spacing: 0.3px;
+
+    pointer-events: none;
+    position: relative;
+}
+.nav_profile_name p::selection
+{
+    background: rgb(94, 3, 192);
 }
 
 #fileUpdate {
@@ -146,10 +157,14 @@
 
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    box-shadow: 1px 1px 10px rgba(15, 15, 15, 0.2);
+    box-shadow: 1px 1px 10px rgba(134, 134, 134, 0.2);
     z-index: 999;
 
-    background: rgb(255, 255, 255);
+    background: rgb(43, 43, 43);
+    border-top: transparent;
+    border-left: 1px solid #807f7f;
+    border-right: 1px solid #807f7f;
+    border-bottom: 1px solid #807f7f;
 }
 .set_name {
     outline: none;
@@ -160,15 +175,22 @@
     padding: 5px 10px; 
     margin-bottom: 10px;
 
-    color: rgb(145, 145, 145);
+    font-weight: 600;
+    background: rgb(228, 228, 228);
+    color: rgb(39, 39, 39);
     box-shadow: 1px 1px 5px rgba(15, 15, 15, 0.2);
 }
 .set_name::placeholder {
-    color: rgb(184, 184, 184);
+    color: #7a7a7a;
     transition: .2s;
 }
 .set_name:focus::placeholder {
-    color: rgb(218, 218, 218);
+    color: #a3a3a3;
+}
+.set_name::selection
+{
+    background: rgb(94, 3, 192);
+    color: #fff;
 }
 .window_uploadFile {
     border: 1px solid transparent; 
@@ -264,7 +286,7 @@
     color: rgb(248, 45, 45);
 
     text-align: center;
-    text-shadow: 1px 1px 5px rgba(15, 15, 15, 0.2);
+    text-shadow: 1px 1px 5px rgba(155, 155, 155, 0.2);
 }
 
 

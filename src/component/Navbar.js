@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 // style css
 import './Navbar.css';
+import './responsive.css'
 
 
 //! Function Component
-export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
+export default function Navbar({ getInfoNavbar, getStatusInputPost, clearStatusFeeling, clearImagesPost, toggleWindowOptionPost, isWindowNavbar, toggleWindowNavbar, onClickCloseImage }) {
     //! State Image
     const [imgURL, setImgURL] = useState(null);    
     const [imgPreview, setImgPreview] = useState(null);
@@ -14,8 +15,6 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
     //! State Name
     const [inputName, setInputName] = useState('');
     const [profileName, setProfileName] = useState('');
-    //! State open and close window custom profile
-    const [windowCustom, setWindowCustom] = useState(false);
     //! State Error
     const [error, setError] = useState(false);
     const [length5Error, setLength5Error] = useState(false);
@@ -52,13 +51,17 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
 
     //! show custom profile
     const showCustomProfile = () => {
-        setWindowCustom(true); 
+        toggleWindowNavbar('toggle');
         // Do not open Window Input Post
         getStatusInputPost(false);
+        // close window option post
+        toggleWindowOptionPost('close', 0);
+        // close image showing
+        onClickCloseImage();
     }
     //! close custom profile
     const closeCustomProfile = () => {
-        setWindowCustom(false);
+        toggleWindowNavbar('close');
         // close error when window closed
         setError(false);
         setLength5Error(false);
@@ -100,7 +103,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
                 setLength15Error(true);
             } else if(error === true || length5Error === true || length15Error === true) {
                 // can't close
-                setWindowCustom(true);
+                toggleWindowNavbar('show');
             }  
             else {
                 // set name
@@ -110,7 +113,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
                 // clear state
                 setInputName('');
                 // close window custom profile
-                setWindowCustom(false);
+                toggleWindowNavbar('close');
                 // set Error
                 setLength5Error(false);
                 setLength15Error(false);
@@ -119,7 +122,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
                 getInfoNavbar(imgURL, inputName);
             } 
         } else if(error === true || length5Error === true || length15Error === true) {
-            setWindowCustom(true); 
+            toggleWindowNavbar('show');
         } else {
             // set name
             setProfileName(profileName);
@@ -128,7 +131,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
             // clear state
             setInputName('');
             // close window custom profile
-            setWindowCustom(false);
+            toggleWindowNavbar('close');
             // call function getInfoNavbar at Input component
             getInfoNavbar(imgURL, profileName);
         }
@@ -138,11 +141,11 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
 
     //! clear profile
     const clearProfile = () => {
+        toggleWindowNavbar('close');
         setProfileName('');
         setInputName('');
         setImgPreview(null);
         setImgURL(null);
-        setWindowCustom(false);
         //error
         setLength5Error(false);
         setLength15Error(false);
@@ -151,6 +154,10 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
         getInfoNavbar(null, '');
         // Do not open Window Input Post
         getStatusInputPost(true);
+        // Clear ImagesPost in Input Post
+        clearImagesPost();
+        // Clear Status Feeling in Input Post
+        clearStatusFeeling();
     }
 
 
@@ -194,7 +201,7 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
 
                 {/*//! window custom profile */}
                 <div className="window_profile" style={{
-                    display: windowCustom === true
+                    display: isWindowNavbar === true
                     ? 'flex'
                     : 'none'
                 }}> 
@@ -222,5 +229,10 @@ export default function Navbar({ getInfoNavbar, getStatusInputPost }) {
 //! PropTypes 
 Navbar.propTypes = {
     getInfoNavbar: PropTypes.func.isRequired, 
-    getStatusInputPost: PropTypes.func.isRequired
+    getStatusInputPost: PropTypes.func.isRequired,
+    clearStatusFeeling: PropTypes.func.isRequired,
+    toggleWindowOptionPost: PropTypes.func.isRequired, 
+    isWindowNavbar: PropTypes.bool.isRequired,
+    toggleWindowNavbar: PropTypes.func.isRequired, 
+    onClickCloseImage: PropTypes.func.isRequired
 }

@@ -1,6 +1,7 @@
 //! Import
 import React from 'react'
 import './Input.css'
+import './responsive.css'
 // PropTypes
 import PropTypes from 'prop-types'
 // Icon 
@@ -20,7 +21,7 @@ const maxNumber = 69;
 
 
 //! Function Component
-export default function Input({ inputProfileImg, onClickShowImage, inputProfileName, getWindowInput, textInputPost, getUploadImage, imagesPosts, getStatusFeeling , countTextInputPost }) {
+export default function Input({ inputProfileImg, onClickShowImage, inputProfileName, getWindowInput, textInputPost, getUploadImage, imagesPosts, getStatusFeeling , countTextInputPost, toggleWindowOptionPost }) {
     //! State
     // State Image Input Post
     
@@ -98,6 +99,7 @@ export default function Input({ inputProfileImg, onClickShowImage, inputProfileN
                             <div 
                                 className="bottom_image"
                                 onClick={onImageUpload}
+                                onClickCapture={() => toggleWindowOptionPost('close', 0)}
                             >
                                 <BsImages 
                                     style={{
@@ -140,5 +142,6 @@ Input.propTypes = {
     getUploadImage: PropTypes.func.isRequired,
     imagesPosts: PropTypes.array.isRequired, 
     getStatusFeeling: PropTypes.func.isRequired, 
-    countTextInputPost: PropTypes.number.isRequired
+    countTextInputPost: PropTypes.number.isRequired,
+    toggleWindowOptionPost: PropTypes.func.isRequired
 }
